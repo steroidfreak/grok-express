@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grok Frontend</title>
+  <style>
+    /* Loading animation */
+    .loader {
+      border: 8px solid #f3f3f3; /* Light grey */
+      border-top: 8px solid #3498db; /* Blue */
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      display: none; /* Hidden by default */
+      margin: 10px auto; /* Center the loader */
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Grok JS Assistant</h1>
+  <textarea id="message" rows="4" cols="50"></textarea><br>
+  <button onclick="sendRequest()">Submit</button>
+
+  <!-- Div to display the result -->
+  <div id="result-container">
+    <h2>Result:</h2>
+    <div id="result-content"></div>
+    <div class="loader" id="loader"></div> <!-- Loader element -->
+  </div>
+
+  <script>
+    async function sendRequest() {
+      const message = document.getElementById('message').value;
+      const loader = document.getElementById('loader');
+      
+      // Show the loader
+      loader.style.display = 'block';
+
+      const response = await fetch('http://localhost:3000/grok', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ message: message }),
+      });
+
+      const result = await response.json();
+      console.log(result.content);
+
+      // Clear any previous result
+      const resultContent = document.getElementById('result-content');
+      resultContent.innerHTML = '';
+      resultContent.innerHTML = result.content;
+
+      // Hide the loader
+      loader.style.display = 'none';
+    }
+  </script>
+</body>
+
+</html>
