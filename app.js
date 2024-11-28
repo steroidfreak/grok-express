@@ -4,6 +4,7 @@ const express = require("express");
 // const { ObjectId } = require('mongodb');
 const MongoClient = require("mongodb").MongoClient;
 const dbname = "prompthub";
+const promptsRouter = require('./routes/prompts');
 const cors = require('cors');
 const app = express();
 const port = 3000;
@@ -28,6 +29,8 @@ const moonshotClient = new OpenAI({
 
 app.use(cors());
 app.use(express.json());
+
+app.use('/api/prompts', promptsRouter);
 
 async function connect(uri, dbname) {
   let client = await MongoClient.connect(uri, {
